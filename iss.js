@@ -57,6 +57,10 @@ const fetchISSFlyOverTimes = function(coords, callback) {
     coords = JSON.parse(body);
     callback(err, coords);
   });
-
 };
-module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes};
+
+const nextISSTimesForMyLocation = function(callback) {
+  callback();
+}
+
+module.exports = { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes, nextISSTimesForMyLocation};
