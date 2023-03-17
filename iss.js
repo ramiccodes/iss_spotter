@@ -8,7 +8,7 @@
  */
 
 const request = require('request');
-
+let data;
 const fetchMyIP = function(callback) { 
   request('https://geo.ipify.org/api/v2/country,city?apiKey=at_6NsY5uiHn6muCVKw3rfP3ePOz4j6Y', (err, res, body) => {
     if (err) {
@@ -22,8 +22,28 @@ const fetchMyIP = function(callback) {
       return;
     }
 
-    const data = JSON.parse(body);
+    data = JSON.parse(body);
     callback(err, data);
   })
 }
-module.exports = { fetchMyIP };
+
+const fetchCoordsByIP = function(ip, callback) {
+  request(`http://ipwho.is/${ip}`, (err, res, body) => {
+    if (err) {
+      callback(err, null);
+      return;
+    }
+
+    const parsed = JSON.parse(body);
+
+    if (!parsed.success) {
+      const msg = `Success status was ${parsed.success}. Server message says: ${parsed.message} when fetching for IP ${parsed.ip}`;
+      callback(Error(msg), null);
+      return;
+    }
+
+    ip = JSON.parse(body);
+    callback(err, ip)
+  })
+}
+module.exports = { fetchMyIP, fetchCoordsByIP };
